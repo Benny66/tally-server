@@ -1,0 +1,7 @@
+.idea
+*.DS_Store
+go.sum
+runtime/logs/*
+public/web_doc/*
+public/export/*
+.env
