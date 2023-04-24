@@ -4,4 +4,6 @@ go.sum
 runtime/logs/*
 public/web_doc/*
 public/export/*
+public/images/*
 .env
+tally-server

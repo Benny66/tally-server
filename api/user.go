@@ -11,6 +11,7 @@ package api
 
 import (
 	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"strconv"
 
@@ -22,6 +23,7 @@ import (
 	"github.com/Benny66/tally-server/utils/format"
 	"github.com/Benny66/tally-server/utils/function"
 	"github.com/Benny66/tally-server/utils/language"
+	"github.com/Benny66/tally-server/utils/uploader"
 	"github.com/silenceper/wechat/v2"
 	"github.com/silenceper/wechat/v2/cache"
 	miniConfig "github.com/silenceper/wechat/v2/miniprogram/config"
@@ -147,22 +149,41 @@ func (api *userApi) Benediction(context *gin.Context) {
 		return
 	}
 	format.NewResponseJson(context).Success(phraseInfo)
-	return
 }
 
 func (api *userApi) UploadFile(context *gin.Context) {
-	//
-	format.NewResponseJson(context).Success(1)
+	file, err := context.FormFile("file")
+	if err != nil {
+		format.NewResponseJson(context).Error(1, err.Error())
+		return
+	}
+	//限制10m最大
+	if file.Size > 10*1024*1024 {
+		format.NewResponseJson(context).Error(language.INVALID_PARMAS)
+		return
+	}
+	src, err := file.Open()
+	if err != nil {
+		format.NewResponseJson(context).Error(1, err.Error())
+		return
+	}
+	defer src.Close()
+	// 读取文件内容并转换为 []byte
+	bytesData, err := ioutil.ReadAll(src)
+	if err != nil {
+		format.NewResponseJson(context).Error(1, err.Error())
+		return
+	}
+	url, err := uploader.PutImage(bytesData, "")
+	if err != nil {
+		format.NewResponseJson(context).Error(1, err.Error())
+		return
+	}
+	format.NewResponseJson(context).Success(url)
 }
 
 func (api *userApi) GetWeather(context *gin.Context) {
-	//
 	format.NewResponseJson(context).Success("clear_day.png")
-}
-
-func (api *userApi) getCategoryList(context *gin.Context) {
-	// userInfo := service.UserService.User(context)
-
 }
 
 // @Summary 退出登录

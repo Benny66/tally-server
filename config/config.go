@@ -24,6 +24,7 @@ type config struct {
 	DBName     string
 
 	//redis
+	RedisUsed     string
 	RedisAddr     string
 	RedisPassword string
 
@@ -36,7 +37,16 @@ type config struct {
 	WxAPPID  string
 	WxSecret string
 
-	AppUrl string
+	AppUrl        string
+	AppUploadType string
+	AppLocalPath  string
+
+	QiNiuHost         string
+	QiNiuRegionHost   string
+	QiNiuAccessId     string
+	QiNiuAccessSecret string
+	QiNiuBucket       string
+	QiNiuStyleDetail  string
 }
 
 func init() {
@@ -56,6 +66,7 @@ func init() {
 		DBPassword: getEnv("DB_PASSWORD", ""),
 		DBName:     getEnv("DB_NAME", ""),
 
+		RedisUsed:     getEnv("DB_REDIS_USED", "false"),
 		RedisAddr:     getEnv("DB_REDIS_ADDRESS", ""),
 		RedisPassword: getEnv("DB_REDIS_PASSWORD", ""),
 		AppName:       getEnv("APP_NAME", "gin-server"),
@@ -63,9 +74,19 @@ func init() {
 		TokenSecret:   getEnv("TOKEN_SECRET", "akhdfijwfwsefsdf"),
 		Language:      getEnv("LANGUAGE", "zh-cn"),
 
-		WxAPPID:  getEnv("WX_APPID", "xxxxx"),
-		WxSecret: getEnv("WX_SECRET", "xxxx"),
-		AppUrl:   getEnv("APP_URL", "http://127.0.0.1:8080"),
+		WxAPPID:       getEnv("WX_APPID", "xxxxx"),
+		WxSecret:      getEnv("WX_SECRET", "xxxx"),
+		AppUrl:        getEnv("APP_URL", "http://127.0.0.1:8080"),
+		AppUploadType: getEnv("APP_UPLOAD_TYPE", "qiniu"),
+
+		AppLocalPath: getEnv("APP_LOCAL_PATH", "./public"),
+
+		QiNiuHost:         getEnv("QINIU_HOST", ""),
+		QiNiuRegionHost:   getEnv("QINIU_REGION_HOST", ""),
+		QiNiuAccessId:     getEnv("QINIU_ACCESS_ID", ""),
+		QiNiuAccessSecret: getEnv("QINIU_ACCESS_SECRET", ""),
+		QiNiuBucket:       getEnv("QINIU_BUCKET", ""),
+		QiNiuStyleDetail:  getEnv("QINIU_STYLE_DETAIL", "imageView2/2/w/750"),
 	}
 	Config.LogExpire, _ = strconv.Atoi(getEnv("LOG_EXPIRE", "30")) //日志保存时间(单位：天")
 

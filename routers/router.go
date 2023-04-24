@@ -38,7 +38,8 @@ func NewRouter() *router {
 type router struct{}
 
 func (router *router) Init() *gin.Engine {
-	r := gin.New()
+	r := gin.Default()
+	r.SecureJsonPrefix(")]}',\n")
 	gin.SetMode(config.Config.Mode)
 	if gin.IsDebugging() {
 		pprof.Register(r, "/debug/pprof")

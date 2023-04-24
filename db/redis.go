@@ -21,6 +21,9 @@ var RRedisClient = RRedis{
 }
 
 func init() {
+	if config.Config.RedisUsed != "true" {
+		return
+	}
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 	defer cancel()
 	RRedisClient.RedisCli = redis.NewClient(&redis.Options{
