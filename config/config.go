@@ -79,7 +79,8 @@ func init() {
 		AppUrl:        getEnv("APP_URL", "http://127.0.0.1:8080"),
 		AppUploadType: getEnv("APP_UPLOAD_TYPE", "qiniu"),
 
-		AppLocalPath: getEnv("APP_LOCAL_PATH", "./public"),
+		//相对路径
+		AppLocalPath: getEnv("APP_LOCAL_PATH", "/public"),
 
 		QiNiuHost:         getEnv("QINIU_HOST", ""),
 		QiNiuRegionHost:   getEnv("QINIU_REGION_HOST", ""),

@@ -33,6 +33,9 @@ type localUploader struct {
 }
 
 func (local *localUploader) PutImage(data []byte, contentType string) (string, error) {
+	if contentType == "" {
+		contentType = "image/jpeg"
+	}
 	key := generateImageKey(data, contentType)
 	return local.PutObject(key, data, contentType)
 }
@@ -41,14 +44,14 @@ func (local *localUploader) PutObject(key string, data []byte, contentType strin
 	if err := os.MkdirAll("/", os.ModeDir); err != nil {
 		return "", err
 	}
-	filename := filepath.Join(local.path, key)
+	filename := filepath.Join("."+local.path, key)
 	if err := os.MkdirAll(filepath.Dir(filename), os.ModePerm); err != nil {
 		return "", err
 	}
 	if err := ioutil.WriteFile(filename, data, os.ModePerm); err != nil {
 		return "", err
 	}
-	return function.UrlJoin(local.host, key), nil
+	return function.UrlJoin(local.host+local.path, key), nil
 }
 
 func (local *localUploader) CopyImage(originUrl string) (string, error) {
