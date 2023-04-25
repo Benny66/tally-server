@@ -232,3 +232,40 @@ func (api *tallyApi) GetTallyMainInfo(context *gin.Context) {
 	}
 	format.NewResponseJson(context).Success(tally)
 }
+
+func (api *tallyApi) GetTallySta(context *gin.Context) {
+	typeStr := context.Request.FormValue("type")
+	date := context.Request.FormValue("date")
+	var query string = "1 = 1 "
+	if typeStr != "" {
+		query += fmt.Sprintf("and type = %s ", typeStr)
+	}
+	if date != "" {
+		dateStartTime, err := function.Parse(fmt.Sprintf("%s 00:00:00", date), function.FmtDateTime)
+		if err != nil {
+			format.NewResponseJson(context).Error(1, err.Error())
+			return
+		}
+		dateStartTime = time.Date(dateStartTime.Year(), dateStartTime.Month(), 1, 0, 0, 0, 0, dateStartTime.Location())
+		dateEndTime := dateStartTime.AddDate(0, 1, 0)
+
+		fmt.Println(dateStartTime, dateEndTime)
+
+		query += fmt.Sprintf("and date >= '%s' and date < '%s'", dateStartTime.String(), dateEndTime.String())
+	}
+	mainSta, err := models.MainDao.StaWhere(query)
+	if err != nil {
+		format.NewResponseJson(context).Error(1, err.Error())
+		return
+	}
+	var res []schemas.GetTallyStaRes
+	for _, item := range mainSta {
+		res = append(res, schemas.GetTallyStaRes{
+			NickName:  item.NickName,
+			AvatarUrl: item.AvatarUrl,
+			Pay:       item.Pay,
+			Time:      item.Time.String(),
+		})
+	}
+	format.NewResponseJson(context).Success(res)
+}

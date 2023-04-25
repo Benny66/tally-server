@@ -158,3 +158,17 @@ func (dao *mainDao) Preloads(query string) *mainDao {
 		dao.gm.Preload(query),
 	}
 }
+
+func (dao *mainDao) StaWhere(query interface{}, args ...interface{}) (list []MainStaModel, err error) {
+	db := dao.gm.Select("nick_name,avatar_url,sum(money) as pay, max(date) time").
+		Joins("JOIN tally_user ON tally_user.id = tally_main.user_id").
+		Where(query, args...).
+		Group("user_id").
+		Order("pay desc").
+		Find(&list).
+		Limit(20)
+	if err = db.Error; db.Error != nil {
+		return
+	}
+	return
+}

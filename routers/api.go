@@ -35,6 +35,7 @@ func routerV1(group *gin.RouterGroup) {
 
 		group.POST("set-tally-edit", api.TallyApi.SetTallyMainEdit)
 		group.POST("get-tally-info", api.TallyApi.GetTallyMainInfo)
+		group.POST("get-tally-sta", api.TallyApi.GetTallySta)
 
 	}
 

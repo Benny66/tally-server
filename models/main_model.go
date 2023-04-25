@@ -31,3 +31,14 @@ type MainModel struct {
 func (um MainModel) TableName() string {
 	return "tally_main"
 }
+
+type MainStaModel struct {
+	NickName  string    `gorm:"column:nick_name;not null" json:"nick_name"`
+	AvatarUrl string    `gorm:"column:avatar_url;not null" json:"avatar_url"`
+	Pay       float64   `gorm:"column:pay;not null" json:"pay"`
+	Time      ModelTime `gorm:"column:time" json:"time"`
+}
+
+func (um MainStaModel) TableName() string {
+	return "tally_main"
+}

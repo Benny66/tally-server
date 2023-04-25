@@ -80,3 +80,10 @@ type SetUserInfoApiReq struct {
 	Job       string `form:"job" json:"job"`
 	AvatarUrl string `form:"avatar_url" json:"avatar_url"`
 }
+
+type GetTallyStaRes struct {
+	NickName  string  `json:"nickname"`
+	AvatarUrl string  `json:"avatarUrl"`
+	Pay       float64 `json:"pay"`
+	Time      string  `json:"time"`
+}
