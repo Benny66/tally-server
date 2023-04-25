@@ -1,7 +1,6 @@
 package function
 
 import (
-	"fmt"
 	"net"
 	"time"
 )
@@ -12,7 +11,6 @@ func IsPing(ip string) bool {
 	Time, _ := time.ParseDuration("3s")
 	conn, err := net.DialTimeout("ip4:icmp", ip, Time)
 	if err != nil {
-		fmt.Println(err)
 		return false
 	}
 	_, err = conn.Write(payload)

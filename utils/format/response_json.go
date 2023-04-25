@@ -69,7 +69,12 @@ func (r *responseJson) Error(errorCode int, params ...interface{}) {
 		Data: "",
 	}
 	r.context.Abort()
-	r.context.JSON(http.StatusInternalServerError, result)
+	httpCode := http.StatusInternalServerError
+	switch errorCode {
+	case language.TOKEN_EMPTY:
+		httpCode = http.StatusUnauthorized
+	}
+	r.context.JSON(httpCode, result)
 }
 
 /*

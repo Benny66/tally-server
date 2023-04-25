@@ -162,7 +162,6 @@ func connServer(key, Addr string) {
 func (w *receiver) receiveMsg(cmd int, msg []byte) {
 	w.receiverMtx.RLock()
 	defer w.receiverMtx.RUnlock()
-	fmt.Println(9)
 	if _, ok := w.receiver[cmd]; ok {
 		go func() {
 			select {

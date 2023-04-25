@@ -1,8 +1,6 @@
 package api
 
 import (
-	"fmt"
-
 	"github.com/Benny66/tally-server/utils/format"
 	"github.com/Benny66/tally-server/utils/log"
 	myRedis "github.com/Benny66/tally-server/utils/redis"
@@ -38,6 +36,5 @@ func (api *redisApi) Test(context *gin.Context) {
 		format.NewResponseJson(context).Error(51001, err.Error())
 		return
 	}
-	fmt.Println(value)
-
+	format.NewResponseJson(context).Success(value)
 }

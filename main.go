@@ -3,13 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/Benny66/tally-server/config"
-	_ "github.com/Benny66/tally-server/migrations"
-	"github.com/Benny66/tally-server/routers"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/Benny66/tally-server/config"
+	_ "github.com/Benny66/tally-server/migrations"
+	"github.com/Benny66/tally-server/routers"
 
 	"github.com/kardianos/service"
 

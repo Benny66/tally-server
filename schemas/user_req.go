@@ -42,6 +42,7 @@ type GetTallyMainListApiReq struct {
 	BookId     int    `form:"book_id" json:"book_id"`
 	CategoryId int    `form:"category_id" json:"category_id"`
 	Type       int    `form:"type" json:"type"`
+	Date       string `form:"type" json:"date"`
 	StartTime  string `form:"start_time" json:"start_time"`
 	EndTime    string `form:"end_time" json:"end_time"`
 }

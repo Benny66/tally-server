@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"strconv"
+	"time"
 
 	database "github.com/Benny66/tally-server/db"
 	"github.com/Benny66/tally-server/models"
@@ -29,7 +30,9 @@ type tallyApi struct {
 
 func (api *tallyApi) GetTallyMainTotal(context *gin.Context) {
 	userInfo := service.UserService.User(context)
-	var req = schemas.GetTallyMainListApiReq{}
+	var req = schemas.GetTallyMainListApiReq{
+		Date: context.Request.FormValue("date"),
+	}
 
 	bookIdStr := context.Request.FormValue("book_id")
 	req.BookId, _ = strconv.Atoi(bookIdStr)
@@ -37,12 +40,21 @@ func (api *tallyApi) GetTallyMainTotal(context *gin.Context) {
 	if req.BookId != 0 {
 		query += fmt.Sprintf(" and book_id = %d ", req.BookId)
 	}
-	if req.StartTime != "" && req.EndTime != "" {
+	if req.Date != "" {
+		dateStartTime, err := function.Parse(fmt.Sprintf("%s 00:00:00", req.Date), function.FmtDateTime)
+		if err != nil {
+			format.NewResponseJson(context).Error(1, err.Error())
+			return
+		}
+		dateStartTime = time.Date(dateStartTime.Year(), dateStartTime.Month(), 1, 0, 0, 0, 0, dateStartTime.Location())
+		dateEndTime := dateStartTime.AddDate(0, 1, 0)
+		query += fmt.Sprintf("and date >= '%s' and date < '%s'", dateStartTime.String(), dateEndTime.String())
+	}
+	if req.Date == "" && req.StartTime != "" && req.EndTime != "" {
 		req.StartTime = fmt.Sprintf("%s 00:00:00", req.StartTime)
 		req.EndTime = fmt.Sprintf("%s 23:59:59", req.EndTime)
 		query += fmt.Sprintf("and date >= '%s' and date <= '%s'", req.StartTime, req.EndTime)
 	}
-	fmt.Println(query)
 	tallies, err := models.MainDao.FindAllWhere(query)
 	if err != nil {
 		format.NewResponseJson(context).Error(1, err.Error())
@@ -89,7 +101,6 @@ func (api *tallyApi) GetTallyMainList(context *gin.Context) {
 		req.EndTime = fmt.Sprintf("%s 23:59:59", req.EndTime)
 		query += fmt.Sprintf("and date >= '%s' and date <= '%s'", req.StartTime, req.EndTime)
 	}
-	fmt.Println(query)
 
 	tallies, err := models.MainDao.FindAllWhere(query)
 	if err != nil {

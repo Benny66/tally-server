@@ -18,7 +18,7 @@ const (
 	METHOD_NOT_FOUND  = 5
 	TOKEN_INVALID     = 6
 	TOKEN_EXPIRE      = 7
-	TOKEN_EMPTY       = 4000
+	TOKEN_EMPTY       = 8
 	PERMISSION_DENY   = 9
 
 	//用户模块
