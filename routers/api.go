@@ -16,6 +16,7 @@ func routerV1(group *gin.RouterGroup) {
 
 	group.POST("upload-file", api.UserApi.UploadFile)
 	group.POST("get-weather", api.UserApi.GetWeather)
+	group.GET("get-projects", api.ProjectApi.GetProjects)
 
 	group.Use(middleware.AuthMiddleware())
 	{

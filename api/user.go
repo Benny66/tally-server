@@ -183,7 +183,7 @@ func (api *userApi) UploadFile(context *gin.Context) {
 }
 
 func (api *userApi) GetWeather(context *gin.Context) {
-	format.NewResponseJson(context).Success("clear_day.png")
+	format.NewResponseJson(context).Success(uploader.GetUrl("/static/imgs/clear_day.png", "", 0))
 }
 
 // @Summary 退出登录
